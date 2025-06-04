@@ -47,3 +47,7 @@ def seed_database():
         pass
     finally:
         session.close()
+ session.query(Car).delete()
+        session.query(Customer).delete()
+        session.query(Company).delete()
+        session.commit()
