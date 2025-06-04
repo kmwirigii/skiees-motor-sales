@@ -16,9 +16,8 @@ A Python CLI application for managing car inventory, customers, and sales for a 
 
   3.Initialize database:  python lib/seed.py
 
-   #Usage
+#Usage
 Run the application:python lib/run.py
-
 
 #What i have used:
 1.Python.
