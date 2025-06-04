@@ -27,3 +27,15 @@ def display_menu():
     print("2. Manage Customers")
     print("3. Manage Cars")
     print("4. Exit")
+
+    def manage_companies():
+    while True:
+        print("\nCompany Management")
+        print("1. Create Company")
+        print("2. View All Companies")
+        print("3. Find Company by Name")
+        print("4. View Company Details")
+        print("5. Delete Company")
+        print("6. Back to Main Menu")
+        
+        choice = input("Enter your choice: ")
