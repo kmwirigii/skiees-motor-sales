@@ -71,3 +71,6 @@ def seed_database():
         ]
         session.add_all(cars)
         session.commit()
+
+if __name__ == "__main__":
+    seed_database()
