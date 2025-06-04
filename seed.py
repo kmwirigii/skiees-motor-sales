@@ -26,3 +26,9 @@ mail = Column(String)
 
     def __repr__(self):
         return f'<Customer {self.name}>'
+
+class Car(Base):
+    __tablename__ = 'cars'
+    id = Column(Integer, primary_key=True)
+    make = Column(String)
+    model = Column(String)
