@@ -113,4 +113,71 @@ def display_menu():
         print("6. Back to Main Menu")
         
         choice = input("Enter your choice: ")
-        
+
+                if choice == "1":
+            name = input("Enter customer name: ")
+            phone = input("Enter phone number: ")
+            email = input("Enter email: ")
+            company_id = input("Enter company ID: ")
+            
+            if company_id.isdigit():
+                company = session.get(Company, int(company_id))
+                if company:
+                    customer = Customer(name=name, phone=phone, email=email, company=company)
+                    session.add(customer)
+                    session.commit()
+                    print(f"Customer {name} created successfully!")
+                else:
+                    print("Company not found.")
+            else:
+                print("Invalid company ID. Please enter a number.")
+                
+        elif choice == "2":
+            customers = session.query(Customer).all()
+            for customer in customers:
+                print(f"{customer.id}: {customer.name} ({customer.phone})")
+                
+        elif choice == "3":
+            name = input("Enter customer name to search: ")
+            customers = session.query(Customer).filter(Customer.name.ilike(f"%{name}%")).all()
+            if customers:
+                for customer in customers:
+                    print(f"{customer.id}: {customer.name}")
+            else:
+                print("No customers found with that name.")
+                
+        elif choice == "4":
+            customer_id = input("Enter customer ID: ")
+            if customer_id.isdigit():
+                customer = session.get(Customer, int(customer_id))
+                if customer:
+                    print(f"\nCustomer: {customer.name}")
+                    print(f"Phone: {customer.phone}")
+                    print(f"Email: {customer.email}")
+                    print(f"Company: {customer.company.name}")
+                    print("\nCars Purchased:")
+                    for car in customer.cars:
+                        print(f" - {car.year} {car.make} {car.model} (KSH {car.price:,})")
+                else:
+                    print("Customer not found.")
+            else:
+                print("Invalid ID. Please enter a number.")
+                
+        elif choice == "5":
+            customer_id = input("Enter customer ID to delete: ")
+            if customer_id.isdigit():
+                customer = session.get(Customer, int(customer_id))
+                if customer:
+                    session.delete(customer)
+                    session.commit()
+                    print("Customer deleted successfully!")
+                else:
+                    print("Customer not found.")
+            else:
+                print("Invalid ID. Please enter a number.")
+                
+        elif choice == "6":
+            break
+            
+        else:
+            print("Invalid choice. Please try again.")
