@@ -194,3 +194,100 @@ def display_menu():
         print("7. Back to Main Menu")
         
         choice = input("Enter your choice: ")
+                if choice == "1":
+            make = input("Enter car make: ")
+            model = input("Enter car model: ")
+            year = input("Enter year: ")
+            price = input("Enter price (KSH): ")
+            company_id = input("Enter company ID: ")
+            
+            if year.isdigit() and price.isdigit() and company_id.isdigit():
+                company = session.get(Company, int(company_id))
+                if company:
+                    car = Car(make=make, model=model, year=int(year), 
+                            price=int(price), company=company)
+                    session.add(car)
+                    session.commit()
+                    print(f"Car {make} {model} added successfully!")
+                else:
+                    print("Company not found.")
+            else:
+                print("Invalid input. Year, price and company ID must be numbers.")
+                
+        elif choice == "2":
+            cars = session.query(Car).all()
+            for car in cars:
+                owner = car.customer.name if car.customer else "Available"
+                print(f"{car.id}: {car.year} {car.make} {car.model} (KSH {car.price:,}) - {owner}")
+                
+        elif choice == "3":
+            search = input("Enter make or model to search: ")
+            cars = session.query(Car).filter(
+                (Car.make.ilike(f"%{search}%")) | 
+                (Car.model.ilike(f"%{search}%"))
+            ).all()
+            if cars:
+                for car in cars:
+                    owner = car.customer.name if car.customer else "Available"
+                    print(f"{car.id}: {car.year} {car.make} {car.model} - {owner}")
+            else:
+                print("No cars found matching your search.")
+                
+        elif choice == "4":
+            car_id = input("Enter car ID: ")
+            if car_id.isdigit():
+                car = session.get(Car, int(car_id))
+                if car:
+                    print(f"\nCar Details:")
+                    print(f"Make: {car.make}")
+                    print(f"Model: {car.model}")
+                    print(f"Year: {car.year}")
+                    print(f"Price: KSH {car.price:,}")
+                    print(f"Company: {car.company.name}")
+                    if car.customer:
+                        print(f"Owner: {car.customer.name}")
+                    else:
+                        print("Status: Available for sale")
+                else:
+                    print("Car not found.")
+            else:
+                print("Invalid ID. Please enter a number.")
+                
+        elif choice == "5":
+            car_id = input("Enter car ID to delete: ")
+            if car_id.isdigit():
+                car = session.get(Car, int(car_id))
+                if car:
+                    session.delete(car)
+                    session.commit()
+                    print("Car deleted successfully!")
+                else:
+                    print("Car not found.")
+            else:
+                print("Invalid ID. Please enter a number.")
+                
+        elif choice == "6":
+            car_id = input("Enter car ID to sell: ")
+            customer_id = input("Enter customer ID: ")
+            
+            if car_id.isdigit() and customer_id.isdigit():
+                car = session.get(Car, int(car_id))
+                customer = session.get(Customer, int(customer_id))
+                
+                if car and customer:
+                    if car.customer_id:
+                        print("This car is already sold!")
+                    else:
+                        car.customer = customer
+                        session.commit()
+                        print(f"Car sold to {customer.name} successfully!")
+                else:
+                    print("Car or customer not found.")
+            else:
+                print("Invalid IDs. Please enter numbers.")
+                
+        elif choice == "7":
+            break
+            
+        else:
+            print("Invalid choice. Please try again.")
