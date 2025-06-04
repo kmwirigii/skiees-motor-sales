@@ -32,3 +32,8 @@ class Car(Base):
     id = Column(Integer, primary_key=True)
     make = Column(String)
     model = Column(String)
+
+    year = Column(Integer)
+    price = Column(Integer)  # in KSH
+    company_id = Column(Integer, ForeignKey('companies.id'))
+    customer_id = Column(Integer, ForeignKey('customers.id'), nullable=True)
