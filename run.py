@@ -101,3 +101,16 @@ def display_menu():
             
         else:
             print("Invalid choice. Please try again.")
+        
+        def manage_customers():
+    while True:
+        print("\nCustomer Management")
+        print("1. Create Customer")
+        print("2. View All Customers")
+        print("3. Find Customer by Name")
+        print("4. View Customer Details")
+        print("5. Delete Customer")
+        print("6. Back to Main Menu")
+        
+        choice = input("Enter your choice: ")
+        
