@@ -54,3 +54,12 @@ def seed_database():
  skiees = Company(name="Skiees Motors", founding_year=2010)
         session.add(skiees)
         session.commit()
+
+ customers = [
+            Customer(name="John Kamau", phone="254712345678", 
+                   email="john@example.com", company_id=skiees.id),
+            Customer(name="Mary Wanjiku", phone="254723456789",
+                   email="mary@example.com", company_id=skiees.id)
+        ]
+        session.add_all(customers)
+        session.commit()
