@@ -37,3 +37,7 @@ class Car(Base):
     price = Column(Integer)  # in KSH
     company_id = Column(Integer, ForeignKey('companies.id'))
     customer_id = Column(Integer, ForeignKey('customers.id'), nullable=True)
+    engine = create_engine('sqlite:///skiees_motors.db')
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
