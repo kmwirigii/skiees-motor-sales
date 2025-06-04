@@ -41,3 +41,9 @@ class Car(Base):
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
+
+def seed_database():
+    try:
+        pass
+    finally:
+        session.close()
