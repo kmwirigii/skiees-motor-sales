@@ -51,3 +51,6 @@ def seed_database():
         session.query(Customer).delete()
         session.query(Company).delete()
         session.commit()
+ skiees = Company(name="Skiees Motors", founding_year=2010)
+        session.add(skiees)
+        session.commit()
