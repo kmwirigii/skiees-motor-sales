@@ -39,3 +39,65 @@ def display_menu():
         print("6. Back to Main Menu")
         
         choice = input("Enter your choice: ")
+
+                if choice == "1":
+            name = input("Enter company name: ")
+            year = input("Enter founding year: ")
+            if year.isdigit():
+                company = Company(name=name, founding_year=int(year))
+                session.add(company)
+                session.commit()
+                print(f"Company {name} created successfully!")
+            else:
+                print("Invalid year. Please enter a number.")
+                
+        elif choice == "2":
+            companies = session.query(Company).all()
+            for company in companies:
+                print(f"{company.id}: {company.name} (Founded: {company.founding_year})")
+                
+        elif choice == "3":
+            name = input("Enter company name to search: ")
+            companies = session.query(Company).filter(Company.name.ilike(f"%{name}%")).all()
+            if companies:
+                for company in companies:
+                    print(f"{company.id}: {company.name}")
+            else:
+                print("No companies found with that name.")
+                
+        elif choice == "4":
+            company_id = input("Enter company ID: ")
+            if company_id.isdigit():
+                company = session.get(Company, int(company_id))
+                if company:
+                    print(f"\nCompany: {company.name}")
+                    print(f"Founded: {company.founding_year}")
+                    print("\nCars:")
+                    for car in company.cars:
+                        print(f" - {car.year} {car.make} {car.model} (KSH {car.price:,})")
+                    print("\nCustomers:")
+                    for customer in company.customers:
+                        print(f" - {customer.name} ({customer.phone})")
+                else:
+                    print("Company not found.")
+            else:
+                print("Invalid ID. Please enter a number.")
+                
+        elif choice == "5":
+            company_id = input("Enter company ID to delete: ")
+            if company_id.isdigit():
+                company = session.get(Company, int(company_id))
+                if company:
+                    session.delete(company)
+                    session.commit()
+                    print("Company deleted successfully!")
+                else:
+                    print("Company not found.")
+            else:
+                print("Invalid ID. Please enter a number.")
+                
+        elif choice == "6":
+            break
+            
+        else:
+            print("Invalid choice. Please try again.")
