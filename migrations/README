@@ -1,1 +1,34 @@
-Generic single-database configuration.
+#Skiees Motors Management System
+
+A Python CLI application for managing car inventory, customers, and sales for a car dealership .
+
+#Features
+1.Company Management: Create and manage  car selling yards.
+2.Customer Management: Track customers with local phone/email formats.
+3.Car Inventory: Manage vehicle details with prices and Record car sales to customers.
+5.Data Persistence: SQLite database with SQLAlchemy ORM
+
+#Installation
+1.Clone the repository:https://github.com/kmwirigii/skiees-motor-sales
+2.Set up environment:
+   pipenv install
+   pipenv shell
+
+  3.Initialize database:  python lib/seed.py
+
+   #Usage
+Run the application:python lib/run.py
+
+
+#What i have used:
+1.Python.
+2.SQLAlchemy ORM.
+3.QLite database.
+4.lembic for migrations.
+
+
+
+
+
+
+

@@ -1,158 +1,90 @@
-# seeding dummy data
-# faker
+#!/usr/bin/env python3
 
-from lib.models import Customer, Product, Order, OrderItem
-from config.setup import Session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, ForeignKey
 
-# add a session instance
+Base = declarative_base()
+
+class Company(Base):
+    __tablename__ = 'companies'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    founding_year = Column(Integer)
+
+    def __repr__(self):
+        return f'<Company {self.name}>'
+
+class Customer(Base):
+    __tablename__ = 'customers'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    phone = Column(String)
+    email = Column(String)
+    company_id = Column(Integer, ForeignKey('companies.id'))
+
+    def __repr__(self):
+        return f'<Customer {self.name}>'
+
+class Car(Base):
+    __tablename__ = 'cars'
+
+    id = Column(Integer, primary_key=True)
+    make = Column(String)
+    model = Column(String)
+    year = Column(Integer)
+    price = Column(Integer)  # in KSH
+    company_id = Column(Integer, ForeignKey('companies.id'))
+    customer_id = Column(Integer, ForeignKey('customers.id'), nullable=True)
+
+    def __repr__(self):
+        return f'<Car {self.year} {self.make} {self.model}>'
+
+# Database setup
+engine = create_engine('sqlite:///skiees_motors.db')
+Base.metadata.create_all(engine)
+
+Session = sessionmaker(bind=engine)
 session = Session()
 
-# remove any previous seed data
-print("Removing previous seed data... 🌱")
-session.query(Customer).delete()
-session.query(Product).delete()
-session.query(Order).delete()
-session.query(OrderItem).delete()
+def seed_database():
+    try:
+        session.query(Car).delete()
+        session.query(Customer).delete()
+        session.query(Company).delete()
+        session.commit()
 
+        skiees = Company(name="Skiees Motors", founding_year=2010)
+        session.add(skiees)
+        session.commit()  
 
-# add customers
-customer1 = Customer(
-    first_name="Jane",
-    last_name="Doe",
-    email="janedoe@gmail.com",
-    phone="0786543218",
-    gender="Female",
-    age=27,
-)
-customer2 = Customer(
-    first_name="Johnny",
-    last_name="Boy",
-    email="johnnyboy@gmail.com",
-    phone="0712345678",
-    gender="Male",
-    age=30,
-)
-customer3 = Customer(
-    first_name="Hope",
-    last_name="Yunia",
-    email="hope@gmail.com",
-    phone="0712389745",
-    gender="Female",
-    age=24,
-)
-customer4 = Customer(
-    first_name="Masela",
-    last_name="Ogendo",
-    email="masela@gmail.com",
-    phone="0712354321",
-    gender="Female",
-    age=25,
-)
-customer5 = Customer(
-    first_name="Eugene",
-    last_name="Wekesa",
-    email="eugene@gmail.com",
-    phone="0743529875",
-    gender="Male",
-    age=45,
-)
+        
+        customers = [
+            Customer(name="John Kamau", phone="254712345678", email="john@example.com", company_id=skiees.id),
+            Customer(name="Mary Wanjiku", phone="254723456789", email="mary@example.com", company_id=skiees.id),
+            Customer(name="James Mwangi", phone="254734567890", email="james@example.com", company_id=skiees.id)
+        ]
+        session.add_all(customers)
+        session.commit()  
 
+        cars = [
+            Car(make="Toyota", model="Corolla", year=2020, price=2500000, company_id=skiees.id),
+            Car(make="Subaru", model="Forester", year=2019, price=3200000, company_id=skiees.id),
+            Car(make="Nissan", model="X-Trail", year=2021, price=2800000, company_id=skiees.id),
+            Car(make="Mitsubishi", model="Pajero", year=2018, price=3500000, company_id=skiees.id)
+        ]
+        session.add_all(cars)
+        session.commit()
 
-product1 = Product(
-    name="Wireless Mouse",
-    description="Ergonomic wireless mouse with adjustable DPI.",
-    category="Electronics",
-    price=29.99,
-    rating=4.5,
-    quantity=100,
-)
-product2 = Product(
-    name="Yoga Mat",
-    description="Non-slip yoga mat suitable for all levels.",
-    category="Fitness",
-    price=19.99,
-    rating=4.2,
-    quantity=50,
-)
-product3 = Product(
-    name="Coffee Maker",
-    description="12-cup programmable coffee maker with auto shut-off.",
-    category="Home Appliances",
-    price=49.99,
-    rating=4.7,
-    quantity=30,
-)
-product4 = Product(
-    name="Bluetooth Headphones",
-    description="Over-ear headphones with noise cancellation.",
-    category="Audio",
-    price=89.99,
-    rating=4.3,
-    quantity=75,
-)
-product5 = Product(
-    name="Sketchbook",
-    description="A4-sized sketchbook with 100 acid-free pages.",
-    category="Art Supplies",
-    price=12.49,
-    rating=4.6,
-    quantity=200,
-)
+        print("Database seeded successfully!")
+    except Exception as e:
+        session.rollback()
+        print(f"Error seeding database: {e}")
+    finally:
+        session.close()
 
-order1 = Order(
-    order_id="ORNo-123", status="pending", total_amount=300, customer=customer1
-)
-order2 = Order(order_id="ORNo-124", status="delivered", total_amount=800)
-order3 = Order(order_id="ORNo-125", status="pending", total_amount=7000)
-order4 = Order(order_id="ORNo-126", status="in transit", total_amount=8000)
-order5 = Order(order_id="ORNo-127", status="delivered", total_amount=100)
-
-# associate orders with customers
-# customer1.orders.append(order1)
-customer1.orders.append(order4)
-customer2.orders.append(order2)
-customer3.orders.append(order3)
-# customer4.orders.append(order5)
-
-# technique 2
-order5.customer = customer4
-
-# technique 3
-
-
-# associate order items with orders
-order_item1 = OrderItem(quantity=5, product=product2, order=order2)
-order_item2 = OrderItem(quantity=1, product=product1, order=order1)
-order_item3 = OrderItem(quantity=3, product=product3, order=order4)
-order_item4 = OrderItem(quantity=7, product=product1, order=order1)
-order_item5 = OrderItem(quantity=2, product=product4, order=order5)
-order_item6 = OrderItem(quantity=2, product=product5, order=order3)
-
-session.add_all(
-    [
-        customer1,
-        customer2,
-        customer3,
-        customer4,
-        customer5,
-        product1,
-        product2,
-        product3,
-        product4,
-        product5,
-        order1,
-        order2,
-        order3,
-        order4,
-        order5,
-        order_item1,
-        order_item2,
-        order_item3,
-        order_item4,
-        order_item5,
-        order_item6,
-    ]
-)
-session.commit()
-
-print("Finished adding seed data... 🌱")
+if __name__ == "__main__":
+    seed_database()
