@@ -21,3 +21,9 @@ Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
+def display_menu():
+    print("\nSkiees Motors Management System")
+    print("1. Manage Companies")
+    print("2. Manage Customers")
+    print("3. Manage Cars")
+    print("4. Exit")
