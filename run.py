@@ -291,3 +291,28 @@ def display_menu():
             
         else:
             print("Invalid choice. Please try again.")
+        
+        def main():
+    try:
+        while True:
+            display_menu()
+            choice = input("Enter your choice: ")
+            
+            if choice == "1":
+                manage_companies()
+            elif choice == "2":
+                manage_customers()
+            elif choice == "3":
+                manage_cars()
+            elif choice == "4":
+                print("Exiting Skiees Motors Management System. Goodbye!")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        session.close()
+
+if __name__ == "__main__":
+    main()
