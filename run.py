@@ -15,3 +15,9 @@ except ImportError:
     print("2. You have an __init__.py file in the 'lib' directory")
     print("3. You're running the script from the project root directory")
     sys.exit(1)
+
+engine = create_engine('sqlite:///skiees_motors.db')
+Base.metadata.create_all(engine)
+
+Session = sessionmaker(bind=engine)
+session = Session()
