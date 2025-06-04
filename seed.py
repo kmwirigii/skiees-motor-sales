@@ -14,3 +14,10 @@ class Company(Base):
     def __repr__(self):
         return f'<Company {self.name}>'
     
+
+    class Customer(Base):
+    __tablename__ = 'customers'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    phone = Column(String)
+    
