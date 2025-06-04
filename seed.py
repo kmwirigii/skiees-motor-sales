@@ -63,3 +63,11 @@ def seed_database():
         ]
         session.add_all(customers)
         session.commit()
+
+      Car(make="Toyota", model="Corolla", year=2020, 
+                price=2500000, company_id=skiees.id),
+            Car(make="Subaru", model="Forester", year=2019,
+                price=3200000, company_id=skiees.id)
+        ]
+        session.add_all(cars)
+        session.commit()
