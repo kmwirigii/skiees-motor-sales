@@ -181,3 +181,16 @@ def display_menu():
             
         else:
             print("Invalid choice. Please try again.")
+        
+        def manage_cars():
+    while True:
+        print("\nCar Management")
+        print("1. Create Car")
+        print("2. View All Cars")
+        print("3. Find Car by Make/Model")
+        print("4. View Car Details")
+        print("5. Delete Car")
+        print("6. Sell Car to Customer")
+        print("7. Back to Main Menu")
+        
+        choice = input("Enter your choice: ")
